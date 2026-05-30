@@ -112,6 +112,47 @@ curl -X POST http://localhost:3000/transaction \
   -d '{"fromAddress":"FROM_ADDRESS","toAddress":"TO_ADDRESS","amount":10,"signature":"...","publicKey":"..."}'
 ```
 
+## Transaction Lifecycle Example
+
+1. Create a wallet:
+
+```bash
+curl -X POST http://localhost:3000/wallet
+```
+
+Save the returned `address`, `publicKey`, and `privateKey`.
+
+2. With a valid wallet, construct and sign a transaction in your client code.
+   - The request body must include:
+     - `fromAddress`
+     - `toAddress`
+     - `amount`
+     - `signature`
+     - `publicKey`
+
+3. Submit the signed transaction:
+
+```bash
+curl -X POST http://localhost:3000/transaction \
+  -H "Content-Type: application/json" \
+  -d '{"fromAddress":"YOUR_ADDRESS","toAddress":"RECIPIENT_ADDRESS","amount":10,"signature":"SIGNED_PAYLOAD","publicKey":"YOUR_PUBLIC_KEY"}'
+```
+
+4. Mine the transaction into a block:
+
+```bash
+curl -X POST http://localhost:3000/mine \
+  -H "Content-Type: application/json" \
+  -d '{"minerAddress":"YOUR_ADDRESS"}'
+```
+
+5. Check balances and verify chain state:
+
+```bash
+curl http://localhost:3000/balance/YOUR_ADDRESS
+curl http://localhost:3000/chain
+```
+
 ## Notes
 
 - `dist/` is ignored by git and contains compiled JavaScript.
