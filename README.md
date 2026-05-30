@@ -153,6 +153,41 @@ curl http://localhost:3000/balance/YOUR_ADDRESS
 curl http://localhost:3000/chain
 ```
 
+## Node.js Transaction Signing Example
+
+The wallet uses `secp256k1` to sign transaction payloads. Here is a minimal Node.js example to sign a transaction before submitting it:
+
+```js
+const { createSign, createHash } = require('crypto');
+
+const transaction = {
+  fromAddress: 'YOUR_ADDRESS',
+  toAddress: 'RECIPIENT_ADDRESS',
+  amount: 10
+};
+
+const payload = `${transaction.fromAddress}|${transaction.toAddress}|${transaction.amount}`;
+
+const sign = createSign('SHA256');
+sign.update(payload);
+sign.end();
+
+// Replace this with your PEM private key string
+const privateKey = `-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n`;
+
+const signature = sign.sign(privateKey, 'hex');
+
+const signedTransaction = {
+  ...transaction,
+  signature,
+  publicKey: 'YOUR_PUBLIC_KEY'
+};
+
+console.log(JSON.stringify(signedTransaction, null, 2));
+```
+
+Then submit the signed transaction with the API.
+
 ## Notes
 
 - `dist/` is ignored by git and contains compiled JavaScript.
