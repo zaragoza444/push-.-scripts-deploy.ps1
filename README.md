@@ -188,6 +188,24 @@ console.log(JSON.stringify(signedTransaction, null, 2));
 
 Then submit the signed transaction with the API.
 
+## Send Transaction Script
+
+A reusable helper script is available at `scripts/send-transaction.js`.
+
+Run the script after starting the server:
+
+```bash
+node scripts/send-transaction.js RECIPIENT_ADDRESS AMOUNT
+```
+
+The script will:
+
+- create a new wallet
+- sign a transaction
+- submit it to `POST /transaction`
+- mine the pending transactions
+- print the wallet balance and chain length
+
 ## Notes
 
 - `dist/` is ignored by git and contains compiled JavaScript.
